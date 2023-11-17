@@ -21,7 +21,7 @@ float ballDirX = 1, ballDirY = 1;
 float ballSpeedX = 1, ballSpeedY = 0;
 
 void setup() {
-  size(500,500);
+  size(700,700);
   
   ballX=width/4;
   ballY=height/5;
@@ -56,6 +56,12 @@ void gameScreen() {
   drawBall();
   drawRacket1();
   drawRacket2();
+  
+  if(racketY1 < 0) racketY1 = 0;
+  if(racketY1 + racketHeight > height) racketY1 = (int) (height-racketHeight);
+  
+  if(racketY2 < 0) racketY2 = 0;
+  if(racketY2 + racketHeight > height) racketY2 = (int) (height-racketHeight);
   
   ballY += 6*ballDirY;
   ballX += 6*ballDirX;
@@ -131,17 +137,13 @@ void bounceOffBarrier() {
 }
 
 void bounceOffRacket() {
- if((ballY+(ballSize/2) > racketY1-(racketHeight/2) && (ballY-(ballSize/2)) < racketY1+(racketHeight/2))) {
-   if (dist(ballX, ballY, ballX, racketX1)<=(ballSize/2)) {
-       ballDirX *= -1;
-       ballDirY *= -1;
-   }
- }
- 
- if((ballY+(ballSize/2) > racketY2-(racketHeight/2) && (ballY-(ballSize/2)) < racketY2+(racketHeight/2))) {
-   if (dist(ballX, ballY, ballX, racketX2)<=(ballSize/2)) {
-       ballDirX *= -1;
-       ballDirY *= -1;
-   }
- }
+  if(ballX < racketX1 + racketWidth && ballX + (ballSize/2) > racketX1 && ballY < racketY1 + racketHeight && ballY + (ballSize/2) > racketY1) {
+      ballDirX *= -1;
+      ballX = racketX1 + (ballSize/2);
+  }
+  
+  if(ballX < racketX2 + racketWidth && ballX + (ballSize/2) > racketX2 && ballY < racketY2 + racketHeight && ballY + (ballSize/2) > racketY2) {
+      ballDirX *= -1;
+      ballX = racketX2 - (ballSize/2);
+  }
 }
